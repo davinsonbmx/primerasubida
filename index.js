@@ -1,51 +1,75 @@
-let curso1 = {
-	id: 1,
-	nombre:'bmx',
-	duracion: 50,
-	valor: 500
-};
+const fs= require('fs');
+const c = require('./materias');
+let materia = c.materias;
 
-let curso2 = {
-	id: 2,
-	nombre:'baseball',
-	duracion: 15,
-	valor: 450
-};
-
-let curso3 = {
-	id: 3,
-	nombre:'skate',
-	duracion: 30,
-	valor: 400
-};
-
-let mostarCurso1 = () =>{
-	console.log('id: ' + curso1.id);
-	console.log('nombre :' + curso1.nombre);
-	console.log('duracion :' + curso1.duracion);
-	console.log('valor :' + curso1.valor);
+const matricula = {
+	cedula:{
+		demand:true,
+		alias:'c'
+	},
+	nombre:{
+		demand:true,
+		alias:'nom'
+	},
+	id:{ 
+		demand:true,
+		alias:'i'
+	}
 }
 
-let mostarCurso2 = () =>{
-	setTimeout(function() {
-		console.log('id: ' + curso2.id);
-		console.log('nombre :' + curso2.nombre);
-		console.log('duracion :' + curso2.duracion);
-		console.log('valor :' + curso2.valor);
+let mostarMaterias = () =>{
+		console.log('id: ' + materia[0].id);
+		console.log('nombre :' + materia[0].nombre);
+		console.log('duracion :' + materia[0].duracion);
+		console.log('valor :' + materia[0].valor + '\n');
+
+	setTimeout(function() { 
+		console.log('id: ' + materia[1].id);
+		console.log('nombre :' + materia[1].nombre);
+		console.log('duracion :' + materia[1].duracion);
+		console.log('valor :' + materia[1].valor + '\n');
 	},2000)
-}
 
-let mostarCurso3 = () =>{
-	setTimeout(function() {
-		console.log('id: ' + curso3.id);
-		console.log('nombre :' + curso3.nombre);
-		console.log('duracion :' + curso3.duracion);
-		console.log('valor :' + curso3.valor);
+	setTimeout(function() { 
+		console.log('id: ' + materia[2].id);
+		console.log('nombre :' + materia[2].nombre);
+		console.log('duracion :' + materia[2].duracion);
+		console.log('valor :' + materia[2].valor + '\n');
 	},4000)
+}
 
+const argv = require ('yargs')
+	.command('matricula','matricula estudiante',matricula)
+	.argv
+
+
+
+let crearArchivo = (matricula)=>{
+
+	let busquedaMateria = materia.find(function(materia) {
+	return materia.id == argv.id});
+
+	if (busquedaMateria != null) {
+	text = 
+	    'EL estudiante : '+ argv.nombre + ' con la cedula' 
+	     + argv.cedula + ' ha sido mariculado en la materia '+  busquedaMateria.nombre +' con el codigo : ' + argv.id  +'\n'  
+
+
+fs.writeFile('informacion.txt' , text , (err) =>{
+		if(err) throw (err);
+		console.log('se ha creado el archivo')
+	});
+	}else{
+		console.log('el id de la materia no coincide con ninguna materia ofertada')
+	}
+}
+
+let ejecutar =() => {
+	setTimeout(function(){mostarMaterias()}, 100);
+	if (argv.id != null){
+		crearArchivo(matricula);
+	}
 }
 
 
-mostarCurso1();
-mostarCurso2();
-mostarCurso3();
+ejecutar();
